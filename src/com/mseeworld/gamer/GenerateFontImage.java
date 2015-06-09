@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.mseeworld.gamer;
 
 import java.awt.Color;
@@ -23,7 +22,7 @@ import javax.imageio.ImageIO;
  * @author xy
  */
 public class GenerateFontImage {
-  
+
   /**
    * 将所有的字体和大小的汉字生成在一幅图中
    */
@@ -71,7 +70,7 @@ public class GenerateFontImage {
     }
 
   }
-  
+
   /**
    * 将所有汉字分别按照字体和大小为类别生成在一幅图中，如16号宋体一幅图
    */
@@ -194,7 +193,7 @@ public class GenerateFontImage {
     }
 
   }
-  
+
   /**
    * 分别按照字体和大小，每个汉字每种字体每种大小一幅图
    */
@@ -203,8 +202,8 @@ public class GenerateFontImage {
       String rootPath = "e:\\font\\category";
       String tstr = getCommonGB2312();
 
-      String fontName[] = {"宋体", "楷体", "黑体", "幼圆", "微软雅黑"}; //"宋体", "楷体", "黑体", "幼圆", "微软雅黑"
-      int fontSize[] = {16, 32, 64}; //16, 32, 64
+      String fontName[] = {"微软雅黑"}; //"宋体", "楷体", "黑体", "幼圆", "微软雅黑"
+      int fontSize[] = {16, 32, 64}; //16, 32, 64  像素 pix
       int num = tstr.length(); //3755
       int col = num;
       int row = fontSize.length * fontName.length;
@@ -216,14 +215,19 @@ public class GenerateFontImage {
         for (int tsize : fontSize) {
           System.out.println("开始生成" + tfont + "_" + tsize + "...");
           for (int i = 0; i < tstr.length(); i++) {
-            BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            BufferedImage bi = new BufferedImage(tsize, tsize, BufferedImage.TYPE_INT_ARGB);
             Graphics2D ig2 = bi.createGraphics();
             Font font = new Font(tfont, Font.PLAIN, tsize);
             ig2.setPaint(Color.black);
             ig2.setFont(font);
             FontMetrics fontMetrics = ig2.getFontMetrics();
             int descent = fontMetrics.getDescent();
-            ig2.drawString(tstr.charAt(i) + "", (maxFontSize - tsize) / 2, (maxFontSize + tsize) / 2 - descent);
+//            System.out.println(descent);
+//            ig2.drawString(tstr.charAt(i) + "", 0, tsize-descent/2-2); //for 微软雅黑
+            ig2.drawString(tstr.charAt(i) + "", 0, tsize-descent/2-1); //for 微软雅黑16pix
+//            ig2.drawString(tstr.charAt(i) + "", 0, tsize-descent); //for 幼圆
+//            ig2.drawString(tstr.charAt(i) + "", 0, tsize-descent); //for 其他字体的16pix
+//            ig2.drawString(tstr.charAt(i) + "", 0, tsize-descent-2); //for 其他字体
 
             String tpath = rootPath + "\\" + tstr.charAt(i) + "";
             File file = new File(tpath);
@@ -232,6 +236,7 @@ public class GenerateFontImage {
             }
             ImageIO.write(bi, "png", new File(tpath + "\\" + tfont + "_" + tsize + ".png"));
           }
+          break;
         }
       }
 
@@ -243,7 +248,8 @@ public class GenerateFontImage {
 
   /**
    * 获取GB2312中常用的3755个汉字
-   * @return 
+   *
+   * @return
    */
   public String getCommonGB2312() {
 
