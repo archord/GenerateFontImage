@@ -22,6 +22,56 @@ import javax.imageio.ImageIO;
  * @author xy
  */
 public class GenerateFontImage {
+  
+  
+  public void generateNumber() {
+    try {
+      String rootPath = "e:\\font\\number";
+      String tstr = "1234567890";
+
+      String fontName[] = {"微软雅黑"}; //"宋体", "楷体", "黑体", "幼圆", "微软雅黑"
+      int fontSize[] = {16, 32, 64}; //16, 32, 64  像素 pix
+      int num = tstr.length(); //3755
+      int col = num;
+      int row = fontSize.length * fontName.length;
+      int maxFontSize = fontSize[fontSize.length - 1];
+      int width = (maxFontSize) * 1;
+      int height = (maxFontSize) * 1;
+
+      for (String tfont : fontName) {
+        for (int tsize : fontSize) {
+          System.out.println("开始生成" + tfont + "_" + tsize + "...");
+          for (int i = 0; i < tstr.length(); i++) {
+            BufferedImage bi = new BufferedImage(tsize, tsize, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D ig2 = bi.createGraphics();
+            Font font = new Font(tfont, Font.PLAIN, tsize);
+            ig2.setPaint(Color.black);
+            ig2.setFont(font);
+            FontMetrics fontMetrics = ig2.getFontMetrics();
+            int descent = fontMetrics.getDescent();
+//            System.out.println(descent);
+//            ig2.drawString(tstr.charAt(i) + "", 0, tsize-descent/2-2); //for 微软雅黑
+            ig2.drawString(tstr.charAt(i) + "", tsize/4, tsize-descent/2-1); //for 微软雅黑16pix
+//            ig2.drawString(tstr.charAt(i) + "", 0, tsize-descent); //for 幼圆
+//            ig2.drawString(tstr.charAt(i) + "", 0, tsize-descent); //for 其他字体的16pix
+//            ig2.drawString(tstr.charAt(i) + "", 0, tsize-descent-2); //for 其他字体
+
+            String tpath = rootPath + "\\" + tfont + "";
+            File file = new File(tpath);
+            if (!file.exists()) {
+              file.mkdirs();
+            }
+            ImageIO.write(bi, "png", new File(tpath + "\\" + tstr.charAt(i) + "_" + tsize + ".png"));
+          }
+//          break;
+        }
+      }
+
+    } catch (IOException ie) {
+      ie.printStackTrace();
+    }
+
+  }
 
   /**
    * 将所有的字体和大小的汉字生成在一幅图中

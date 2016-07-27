@@ -5,7 +5,7 @@ public class Main {
   static public void main(String args[]) throws Exception {
 
     GenerateFontImage gfi = new GenerateFontImage();
-    gfi.outToEachImg();
+    gfi.generateNumber();
 
   }
 
